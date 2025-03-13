@@ -1,8 +1,0 @@
-Initializing network with layer sizes: [784, 64, 64, 64, 64, 10]
-Using activation function: tanh
-Using initialization method: xavier
-Layer 0: Weight shape = (784, 64), Bias shape = (64,)
-Layer 1: Weight shape = (64, 64), Bias shape = (64,)
-Layer 2: Weight shape = (64, 64), Bias shape = (64,)
-Layer 3: Weight shape = (64, 64), Bias shape = (64,)
-Layer 4: Weight shape = (64, 10), Bias shape = (10,)
