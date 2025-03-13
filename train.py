@@ -1,10 +1,14 @@
 import numpy as np
 import wandb
 import keras
+from main import *
+from util import *
+from loss import *
 from sklearn.model_selection import train_test_split
 
-# Import your existing neural network implementation
-# Assuming the FeedForwardNeuralNetwork class and optimizer classes are defined in the code you shared
+
+# Import the neural network implementation from main.py
+#from main import FeedForwardNeuralNetwork, SGD, Momentum, NesterovAcceleratedGradient, RMSProp, Adam, NAdam
 
 # Load and preprocess Fashion MNIST dataset
 (X_train, y_train), (X_test, y_test) = keras.datasets.fashion_mnist.load_data()
@@ -36,22 +40,37 @@ def train_model_with_wandb():
     hidden_layers = [config.layer_size] * config.hidden_layers
     layer_sizes = [input_size] + hidden_layers + [10]  # 10 output classes
 
+    # Prepare optimizer parameters based on the chosen optimizer
+    optimizer_params = {
+        'learning_rate': config.learning_rate
+    }
+
+    # Add specific parameters for each optimizer type
+    if config.optimizer in ['momentum', 'nag']:
+        optimizer_params['momentum'] = 0.9
+    elif config.optimizer in ['rmsprop']:
+        optimizer_params['decay_rate'] = 0.9
+        optimizer_params['epsilon'] = 1e-8
+    elif config.optimizer in ['adam', 'nadam']:
+        optimizer_params['beta1'] = 0.9
+        optimizer_params['beta2'] = 0.999
+        optimizer_params['epsilon'] = 1e-8
+
     # Create model with configured optimizer
     model = FeedForwardNeuralNetwork(
         layer_sizes=layer_sizes,
         optimizer=config.optimizer,
-        init_method=config.weight_init,
         hidden_activation=config.activation,
+        init_method=config.weight_init,
         epochs=config.epochs,
         batch_size=config.batch_size,
-        decay_rate=config.weight_decay,
-        learning_rate=config.learning_rate,
+        **optimizer_params
     )
 
     # Convert labels to one-hot encoding
-    y_train_one_hot = model.oneHotEncoder(y_train)
-    y_val_one_hot = model.oneHotEncoder(y_val)
-    y_test_one_hot = model.oneHotEncoder(y_test)
+    y_train_one_hot = oneHotEncoder(y_train)
+    y_val_one_hot = oneHotEncoder(y_val)
+    y_test_one_hot = oneHotEncoder(y_test)
 
     # Store metrics per epoch
     train_losses = []
@@ -87,15 +106,15 @@ def train_model_with_wandb():
 
         # Evaluate on training data
         train_pred = model.forward_pass(X_train_flat)
-        train_loss = model.cross_entropy_loss(train_pred, y_train_one_hot)
-        train_accuracy = model.accuracy(train_pred, y_train_one_hot)
+        train_loss = cross_entropy_loss(train_pred, y_train_one_hot)
+        train_accuracy = accuracy(train_pred, y_train_one_hot)
         train_losses.append(train_loss)
         train_accuracies.append(train_accuracy)
 
         # Evaluate on validation data
         val_pred = model.forward_pass(X_val_flat)
-        val_loss = model.cross_entropy_loss(val_pred, y_val_one_hot)
-        val_accuracy = model.accuracy(val_pred, y_val_one_hot)
+        val_loss = cross_entropy_loss(val_pred, y_val_one_hot)
+        val_accuracy = accuracy(val_pred, y_val_one_hot)
         val_losses.append(val_loss)
         val_accuracies.append(val_accuracy)
 
@@ -112,13 +131,14 @@ def train_model_with_wandb():
 
     # Final evaluation on test set
     test_pred = model.forward_pass(X_test_flat)
-    test_loss = model.cross_entropy_loss(test_pred, y_test_one_hot)
-    test_accuracy = model.accuracy(test_pred, y_test_one_hot)
-
+    test_loss = cross_entropy_loss(test_pred, y_test_one_hot)
+    test_accuracy = accuracy(test_pred, y_test_one_hot)
     # Log final test metrics
     wandb.log({
         "test_loss": test_loss,
-        "test_accuracy": test_accuracy
+        "test_accuracy": test_accuracy,
+        "loss": test_loss,
+
     })
 
     print(f"Test Loss: {test_loss:.4f}, Test Accuracy: {test_accuracy:.4f}")
@@ -170,10 +190,8 @@ sweep_config = {
 wandb.login()
 
 # Create the sweep
-sweep_id = wandb.sweep(sweep_config, project="da6401-Assignmnet1")
+sweep_id = wandb.sweep(sweep_config, project="da6401-Assignment1")
 
 # Run the sweep
-wandb.agent(sweep_id, train_model_with_wandb, count=2)  # Limit to 20 runs to manage computational resources
+wandb.agent(sweep_id, train_model_with_wandb, count=1)  # Limit to 2 runs as specified
 
-# After the sweep is complete, you can visualize the results in the wandb dashboard
-print(f"Sweep completed. View results at: {wandb.run.get_sweep_url()}")

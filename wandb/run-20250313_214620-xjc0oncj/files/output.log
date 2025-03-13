@@ -1,0 +1,7 @@
+Initializing network with layer sizes: [784, 32, 32, 32, 10]
+Using activation function: tanh
+Using initialization method: random
+Layer 0: Weight shape = (784, 32), Bias shape = (32,)
+Layer 1: Weight shape = (32, 32), Bias shape = (32,)
+Layer 2: Weight shape = (32, 32), Bias shape = (32,)
+Layer 3: Weight shape = (32, 10), Bias shape = (10,)

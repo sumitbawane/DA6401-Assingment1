@@ -1,4 +1,8 @@
 import numpy as np
+from activations import * 
+from activation_derivative import *
+from loss import *
+from util import * 
 
 class Optimizer:
     """Base optimizer class that implements update rule interface"""
@@ -270,9 +274,9 @@ class FeedForwardNeuralNetwork:
             self.a_values.append(np.dot(self.h_values[i], self.weights[i]) + self.biases[i])
 
             if i == len(self.weights) - 1:
-                self.h_values.append(self.activations("softmax", self.a_values[i]))
+                self.h_values.append(activations("softmax", self.a_values[i]))
             else:
-                self.h_values.append(self.activations(self.hidden_activation, self.a_values[i]))
+                self.h_values.append(activations(self.hidden_activation, self.a_values[i]))
 
         return self.h_values[-1]  # Return the output
 
@@ -301,7 +305,7 @@ class FeedForwardNeuralNetwork:
         # Backpropagation for hidden layers
         current_delta = delta
         for i in range(len(self.weights) - 2, -1, -1):
-            current_delta = np.dot(current_delta, self.weights[i + 1].T) * self.activation_derivative(self.hidden_activation, self.h_values[i + 1])
+            current_delta = np.dot(current_delta, self.weights[i + 1].T) * activation_derivative(self.hidden_activation, self.h_values[i + 1])
             dw = np.dot(self.h_values[i].T, current_delta) / m
             db = np.sum(current_delta, axis=0) / m
 
@@ -320,72 +324,7 @@ class FeedForwardNeuralNetwork:
         self.weights, self.biases = self.optimizer.update(
             self.weights, self.biases, gradients_w, gradients_b
         )
-
-    def activations(self, type, x):
-        if type == 'sigmoid':
-            # Clip x to avoid overflow
-            x = np.clip(x, -500, 500)
-            return 1 / (1 + np.exp(-x))
-        elif type == 'relu':
-            return np.maximum(0, x)
-        elif type == 'tanh':
-            # Clip x to avoid overflow
-            x = np.clip(x, -500, 500)
-            return np.tanh(x)
-        elif type == 'softmax':
-            # Clip x to avoid overflow
-            x = np.clip(x, -500, 500)
-            exp_x = np.exp(x - np.max(x, axis=1, keepdims=True))  # Numerical stability
-            return exp_x / np.sum(exp_x, axis=1, keepdims=True)
-        else:
-            return x
-
-    def activation_derivative(self, type, x):
-        if type == 'sigmoid':
-            # The sigmoid derivative should be sigmoid(x)*(1-sigmoid(x))
-            # But x is already the sigmoid output here
-            return x * (1 - x)
-        elif type == 'relu':
-            return 1.0 * (x > 0)
-        elif type == 'tanh':
-            # tanh derivative is (1 - tanh²(x))
-            return 1 - x**2
-        elif type == 'softmax':
-            return x * (1 - x)  # This is a simplification, only valid for certain cases
-        else:
-            return x
-
-    def oneHotEncoder(self, y):
-        # Function to convert labels to one-hot encoding
-        # Ensure y is a 1D array
-        y = np.array(y).reshape(-1)
-
-        # Check the shape before processing
-        print(f"Original y shape before one-hot encoding: {y.shape}")
-
-        # Get number of classes
-        num_classes = len(np.unique(y))
-        if num_classes <= 10:  # Default to 10 classes if it's MNIST
-            num_classes = 10
-
-        # Create one-hot encoding
-        one_hot = np.zeros((y.shape[0], num_classes))
-        for i in range(y.shape[0]):
-            one_hot[i][int(y[i])] = 1
-
-        # Check the final shape
-        print(f"One-hot encoded y shape: {one_hot.shape}")
-
-        return one_hot
-
-    def cross_entropy_loss(self, y_hat, y):
-        m = y.shape[0]
-        # Add small epsilon to prevent log(0)
-        epsilon = 1e-15
-        y_hat = np.clip(y_hat, epsilon, 1 - epsilon)
-        loss = -np.sum(y * np.log(y_hat)) / m
-        return loss
-
+        
     def train(self, x, y, epochs, batch_size, learning_rate=None, optimizer=None, **optimizer_params):
         """
         Train the neural network using the configured optimizer.
@@ -451,16 +390,11 @@ class FeedForwardNeuralNetwork:
             y_eval = y[eval_indices]
 
             prediction = self.forward_pass(x_eval)
-            loss = self.cross_entropy_loss(prediction, y_eval)
-            accuracy = self.accuracy(prediction, y_eval)
+            loss = cross_entropy_loss(prediction, y_eval)
+            accuracy = accuracy(prediction, y_eval)
             print(f"Epoch {epoch + 1}/{epochs}, Loss: {loss:.4f}, Accuracy: {accuracy:.4f}")
 
     def predict(self, x):
         return self.forward_pass(x)
 
-    def accuracy(self, predictions, labels):
-        pred_classes = np.argmax(predictions, axis=1)
-        true_classes = np.argmax(labels, axis=1)
-        accuracy = np.mean(pred_classes == true_classes)
-        return accuracy
-
+  
