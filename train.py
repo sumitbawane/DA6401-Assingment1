@@ -76,7 +76,7 @@ def main():
     parser.add_argument('-w_i', '--weight_init', default='xavier', choices=['random', 'Xavier'], help='Weight initialization method')
     parser.add_argument('-nhl', '--num_layers', type=int, default=5, help='Number of hidden layers in feedforward neural network')
     parser.add_argument('-sz', '--hidden_size', type=int, default=128, help='Number of neurons in hidden layers')
-    parser.add_argument('-a', '--activation', default='tanh', choices=[ 'sigmoid', 'tanh', 'relu'], help='Activation function for hidden layers')
+    parser.add_argument('-a', '--activation',default='tanh', choices=[ 'sigmoid', 'tanh', 'relu'], help='Activation function for hidden layers')
     
     args = parser.parse_args()
     
