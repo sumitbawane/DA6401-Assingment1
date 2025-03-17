@@ -38,7 +38,6 @@ class FeedForwardNeuralNetwork:
         self.setup_optimizer(self.optimizer, **optimizer_params)
 
     def setup_optimizer(self, optimizer='sgd', **optimizer_params):
-        """Configure the self.optimizer based on the provided name and parameters"""
         optimizer_map = {
             'sgd': SGD,
             'momentum': Momentum,
@@ -123,10 +122,6 @@ class FeedForwardNeuralNetwork:
         )
         
     def train(self, x, y, **optimizer_params):
-        """
-        Train the neural network using the configured self.optimizer.
-        Allows for self.optimizer changes during training if needed.
-        """
         loss=[]
         if len(x.shape) > 2:
             x = x.reshape(x.shape[0], -1)

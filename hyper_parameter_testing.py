@@ -29,7 +29,7 @@ def train_model_with_wandb():
     run = wandb.init()
     config = wandb.config
 
-    # Create descriptive run name
+    # descriptive run name
     run_name = f"hl_{config.hidden_layers}_bs_{config.batch_size}_lr_{config.learning_rate}_opt_{config.optimizer}_act_{config.activation}_wd_{config.weight_decay}_init_{config.weight_init}_lf_{config.loss_function}"
     wandb.run.name = run_name
 
@@ -80,12 +80,12 @@ def train_model_with_wandb():
 
     # Training loop with validation after each epoch
     for epoch in range(config.epochs):
-        # Shuffle the data for each epoch
+       
         indices = np.random.permutation(X_train_flat.shape[0])
         X_shuffled = X_train_flat[indices]
         y_shuffled = y_train_one_hot[indices]
 
-        # Mini-batch training
+        
         for i in range(0, X_train_flat.shape[0], config.batch_size):
             x_batch = X_shuffled[i:i + config.batch_size]
             y_batch = y_shuffled[i:i + config.batch_size]
@@ -96,12 +96,11 @@ def train_model_with_wandb():
             # Compute gradients and update weights
             gradients_w, gradients_b = model.back_pass(x_batch, y_batch)
 
-            # Add L2 regularization if weight_decay > 0
+           
             if config.weight_decay > 0:
                 for j in range(len(gradients_w)):
                     gradients_w[j] += config.weight_decay * model.weights[j]
 
-            # Update weights using the optimizer
             model.update_weights(gradients_w, gradients_b)
 
         # Evaluate on training data
@@ -138,7 +137,7 @@ def train_model_with_wandb():
 
         print(f"Epoch {epoch + 1}/{config.epochs}, Train Loss: {train_loss:.4f}, Train Acc: {train_accuracy:.4f}, Val Loss: {val_loss:.4f}, Val Acc: {val_accuracy:.4f}")
 
-    # Final evaluation on test set
+    
     test_pred = model.forward_pass(X_test_flat)
     test_loss = cross_entropy_loss(test_pred, y_test_one_hot)
     test_accuracy = accuracy(test_pred, y_test_one_hot)
@@ -154,7 +153,7 @@ def train_model_with_wandb():
 
 # Define sweep configuration
 sweep_config = {
-    'method': 'bayes',  # Bayesian optimization strategy
+    'method': 'bayes',  
     'metric': {
         'name': 'val_accuracy',
         'goal': 'maximize'
@@ -169,7 +168,7 @@ sweep_config = {
             'values': [5, 10]
         },
         'loss_function': {
-            'values':['mse_loss']
+            'values':['mse_loss','cross_entropy_loss']
         },
         'hidden_layers': {
             'values': [3, 4, 5]
@@ -205,5 +204,5 @@ wandb.login()
 sweep_id = wandb.sweep(sweep_config, project="da6401-Assignment1")
 
 # Run the sweep
-wandb.agent(sweep_id, train_model_with_wandb, count=13)  # Limit to 2 runs as specified
+wandb.agent(sweep_id, train_model_with_wandb, count=20)  
 
