@@ -107,7 +107,7 @@ To display sample images from the Fashion MNIST dataset:
 python display_fashion_mnist_images.py
 ```
 
-## Performance
+## Best Performing model
 
 The model can achieve good performance on the Fashion MNIST dataset with appropriate hyperparameters:
 - Using NAdam optimization
@@ -120,10 +120,10 @@ The model can achieve good performance on the Fashion MNIST dataset with appropr
 ## Example Usage
 
 ```python
-from main import FeedForwardNeuralNetwork
+from main import *
 import numpy as np
 import keras
-from util import oneHotEncoder
+from util import *
 
 # Load and preprocess data
 (X_train, y_train), (X_test, y_test) = keras.datasets.fashion_mnist.load_data()
