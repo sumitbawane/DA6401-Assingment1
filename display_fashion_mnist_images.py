@@ -9,7 +9,7 @@ wandb.init(project="da6401-Assignment1")
 # Load dataset
 (x_train, y_train), (x_test,y_test) = keras.datasets.fashion_mnist.load_data()
 
-# Convert to DataFrame
+
 df = pd.DataFrame({"image": list(x_train), "label": y_train})
 
 for label, group in df.groupby("label"):

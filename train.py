@@ -141,7 +141,6 @@ def main():
     train_accuracies = []
     val_losses = []
     val_accuracies = []
-    # Custom train function with wandb logging
     def train_and_log(model, X_train, y_train, X_test, y_test):
         
         # Create descriptive run name
@@ -195,7 +194,7 @@ def main():
             print(f"Epoch {epoch + 1}/{args.epochs}, Train Loss: {train_loss:.4f}, Train Acc: {train_accuracy:.4f}, Val Loss: {val_loss:.4f}, Val Acc: {val_accuracy:.4f}")
                     
     
-    # Train the model with wandb logging
+    
     train_and_log(model, X_train, y_train, X_test, y_test)
     
     test_pred = model.forward_pass(X_test)

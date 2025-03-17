@@ -48,7 +48,7 @@ model.train(X_train_flat, y_train_one_hot, epochs=10, batch_size=64, learning_ra
 y_pred = model.predict(X_test_flat)
 y_pred_classes = np.argmax(y_pred, axis=1)
 
-# Add this function to your script
+
 def plot_confusion_matrix(y_true, y_pred, class_names=None):
     """
     Plot confusion matrix and return the figure.
@@ -70,7 +70,7 @@ def plot_confusion_matrix(y_true, y_pred, class_names=None):
     # Compute confusion matrix
     cm = confusion_matrix(y_true, y_pred)
     
-    # Create figure and plot
+    
     plt.figure(figsize=(10, 8))
     sns.heatmap(cm, annot=True, fmt='d', cmap='Blues',
                 xticklabels=class_names, yticklabels=class_names)
