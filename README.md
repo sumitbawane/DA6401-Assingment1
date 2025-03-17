@@ -89,7 +89,7 @@ The following command-line arguments are supported, along with their default val
 | `-w_i`, `--weight_init` | `xavier` | `random`, `Xavier` | Weight initialization method |
 | `-nhl`, `--num_layers` | `5` | - | Number of hidden layers in feedforward neural network |
 | `-sz`, `--hidden_size` | `128` | - | Number of neurons in hidden layers |
-| `-a`, `--activation` | `tanh` |  `sigmoid`, `tanh`, `relu` | Activation function for hidden layers |
+| `-a`, `--activation` | `tanh` |  `sigmoid`, `tanh`, `ReLU` | Activation function for hidden layers |
 
 ## Hyperparameter Optimization
 
