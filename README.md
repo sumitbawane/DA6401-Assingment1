@@ -1,6 +1,14 @@
 
 ## DA6401 ASSIGNMENT1 
 
+## wandb report link 
+# https://api.wandb.ai/links/cs24m049-iit-m/gl51039l
+
+## github link
+# https://github.com/sumitbawane/DA6401-Assingment1
+
+
+
 ## Files and Structure
 
 - `main.py`: Core neural network implementation with the `FeedForwardNeuralNetwork` class
