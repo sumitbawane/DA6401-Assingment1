@@ -15,7 +15,7 @@ class Optimizer:
         raise NotImplementedError("Subclasses must implement update method")
 
 class SGD(Optimizer):
-    """Standard Stochastic Gradient Descent"""
+   
     def update(self, weights, biases, gradients_w, gradients_b):
         for i in range(len(weights)):
             weights[i] -= self.learning_rate * gradients_w[i]
@@ -23,7 +23,7 @@ class SGD(Optimizer):
         return weights, biases
 
 class Momentum(Optimizer):
-    """Momentum-based Gradient Descent"""
+    
     def __init__(self, learning_rate=0.01, momentum=0.9):
         super().__init__(learning_rate)
         self.momentum = momentum
@@ -48,7 +48,7 @@ class Momentum(Optimizer):
         return weights, biases
 
 class NesterovAcceleratedGradient(Optimizer):
-    """Nesterov Accelerated Gradient"""
+   
     def __init__(self, learning_rate=0.01, momentum=0.9):
         super().__init__(learning_rate)
         self.momentum = momentum
@@ -77,7 +77,7 @@ class NesterovAcceleratedGradient(Optimizer):
         return weights, biases
 
 class RMSProp(Optimizer):
-    """RMSProp Optimizer"""
+    
     def __init__(self, learning_rate=0.01, decay_rate=0.9, epsilon=1e-8):
         super().__init__(learning_rate)
         self.decay_rate = decay_rate
@@ -104,7 +104,7 @@ class RMSProp(Optimizer):
         return weights, biases
 
 class Adam(Optimizer):
-    """Adam Optimizer"""
+   
     def __init__(self, learning_rate=0.001, beta1=0.9, beta2=0.999, epsilon=1e-8):
         super().__init__(learning_rate)
         self.beta1 = beta1
@@ -151,7 +151,7 @@ class Adam(Optimizer):
         return weights, biases
 
 class NAdam(Optimizer):
-    """NAdam Optimizer (Nesterov-accelerated Adam)"""
+    
     def __init__(self, learning_rate=0.001, beta1=0.9, beta2=0.999, epsilon=1e-8):
         super().__init__(learning_rate)
         self.beta1 = beta1
