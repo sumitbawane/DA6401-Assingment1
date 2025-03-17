@@ -8,5 +8,11 @@ def cross_entropy_loss( y_hat, y):
     return loss
 
 
-def squared_mean_erro(y_hat,y):
-    pass
+def mse_loss(y_hat, y):
+    m = y.shape[0]
+    loss = np.sum((y_hat - y) ** 2) / (2 * m)
+    return loss
+    
+def mse_loss_derivative(y_hat,y):
+    m=y.shape[0]
+    return 2*(y_hat-y)/m

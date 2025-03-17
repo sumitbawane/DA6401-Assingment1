@@ -40,9 +40,9 @@ model=FeedForwardNeuralNetwork(
     hidden_activation='tanh',
     **optimizer_params)
 
-y_train_one_hot = model.oneHotEncoder(y_train)
-y_val_one_hot = model.oneHotEncoder(y_val)
-y_test_one_hot = model.oneHotEncoder(y_test)
+y_train_one_hot = oneHotEncoder(y_train)
+y_val_one_hot = oneHotEncoder(y_val)
+y_test_one_hot = oneHotEncoder(y_test)
 model.train(X_train_flat, y_train_one_hot, epochs=10, batch_size=64, learning_rate=0.001, optimizer='nadam')
 
 y_pred = model.predict(X_test_flat)
@@ -88,8 +88,7 @@ fashion_mnist_classes = [
     'Sandal', 'Shirt', 'Sneaker', 'Bag', 'Ankle boot'
 ]
 img=plot_confusion_matrix(y_test, y_pred_classes,fashion_mnist_classes)
-# Then add this code block at the end of your train_model_with_wandb function,
-# right after calculating the test accuracy and before the final print:
+
 
 # Log confusion matrix to wandb
 wandb.login()
