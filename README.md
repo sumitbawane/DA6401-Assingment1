@@ -1,16 +1,5 @@
-# Neural Network Project
 
-This repository contains an implementation of a deep feed-forward neural network from scratch in Python, focused on image classification with the Fashion MNIST and MNIST datasets.
-
-## Project Overview
-
-This project implements a customizable feed-forward neural network with various optimization algorithms, activation functions, and initialization methods. The implementation includes:
-
-- Multiple optimization algorithms (SGD, Momentum, NAG, RMSProp, Adam, NAdam)
-- Various activation functions (Sigmoid, ReLU, Tanh, Softmax)
-- Different weight initialization strategies (Random, Xavier)
-- Support for multiple loss functions (Cross-entropy, MSE)
-- Integration with Weights & Biases (wandb) for experiment tracking
+## DA6401 ASSIGNMENT1 
 
 ## Files and Structure
 
@@ -40,7 +29,7 @@ This project implements a customizable feed-forward neural network with various 
 ### Installation
 
 ```bash
-pip install numpy keras scikit-learn matplotlib seaborn wandb
+pip install numpy keras scikit-learn matplotlib seaborn wandb tensorflow
 ```
 
 ### Training a Model
@@ -72,7 +61,7 @@ The following command-line arguments are supported, along with their default val
 #### Loss Function and Optimizer
 | Argument | Default | Options | Description |
 |----------|---------|---------|-------------|
-| `-l`, `--loss` | `cross_entropy` | `mean_squared_error`, `cross_entropy` | Loss function for training |
+| `-l`, `--loss` | `cross_entropy_loss` | `mse_loss`, `cross_entropy_loss` | Loss function for training |
 | `-o`, `--optimizer` | `nadam` | `sgd`, `momentum`, `nag`, `rmsprop`, `adam`, `nadam` | Optimizer to use |
 
 #### Optimizer Parameters
@@ -92,7 +81,7 @@ The following command-line arguments are supported, along with their default val
 | `-w_i`, `--weight_init` | `xavier` | `random`, `Xavier` | Weight initialization method |
 | `-nhl`, `--num_layers` | `5` | - | Number of hidden layers in feedforward neural network |
 | `-sz`, `--hidden_size` | `128` | - | Number of neurons in hidden layers |
-| `-a`, `--activation` | `tanh` | `identity`, `sigmoid`, `tanh`, `ReLU` | Activation function for hidden layers |
+| `-a`, `--activation` | `tanh` |  `sigmoid`, `tanh`, `ReLU` | Activation function for hidden layers |
 
 ## Hyperparameter Optimization
 

@@ -62,7 +62,7 @@ def main():
     parser.add_argument('-b', '--batch_size', type=int, default=64, help='Batch size used to train neural network')
     
     # Loss and optimizer arguments
-    parser.add_argument('-l', '--loss', default='cross_entropy', choices=['mean_squared_error', 'cross_entropy'], help='Loss function for training')
+    parser.add_argument('-l', '--loss', default='cross_entropy_loss', choices=['mean_loss', 'cross_entropy_loss'], help='Loss function for training')
     parser.add_argument('-o', '--optimizer', default='nadam', choices=['sgd', 'momentum', 'nag', 'rmsprop', 'adam', 'nadam'], help='Optimizer to use')
     parser.add_argument('-lr', '--learning_rate', type=float, default=0.001, help='Learning rate used to optimize model parameters')
     parser.add_argument('-m', '--momentum', type=float, default=0.5, help='Momentum used by momentum and nag optimizers')
